@@ -1,6 +1,6 @@
 # OctoPrint-Dotontobu
 
-**TODO:** Describe what your plugin does.
+Plugin for [Doton2](https://github.com/bkosciow/doton2) project
 
 ## Setup
 
@@ -9,9 +9,7 @@ or manually using this URL:
 
     https://github.com/bkosciow/OctoPrint-Dotontobu/archive/master.zip
 
-**TODO:** Describe how to install your plugin, if more needs to be done than just installing it via pip or through
-the plugin manager.
 
 ## Configuration
 
-**TODO:** Describe your plugin's configuration options (if any).
+Set config for AES encryption and node name
