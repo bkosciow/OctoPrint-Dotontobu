@@ -89,7 +89,6 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 			))
 			self._logger.info("Message ready")
 
-
 	def on_event(self, event, payload):
 		# print(event)
 		data = {}
@@ -120,7 +119,7 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 		if event == "PrintDone":
 			data['event'] = 'done'
 
-		if data:
+		if data and self._socket is not None:
 			# print(data)
 			message = Message()
 			message.set(data)
