@@ -1,0 +1,38 @@
+<form class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label">{{ _('Node name') }}</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.node_name">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">{{ _('Broadcast IP') }}</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.broadcast_ip">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">{{ _('Static IV ') }}</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.aes_staticiv">
+        </div>
+    </div>
+     <div class="control-group">
+        <label class="control-label">{{ _('IV key') }}</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.aes_ivkey">
+        </div>
+    </div>
+     <div class="control-group">
+        <label class="control-label">{{ _('Data key') }}</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.aes_datakey">
+        </div>
+    </div>
+     <div class="control-group">
+        <label class="control-label">{{ _('Passphrase') }}</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.aes_passphrase">
+        </div>
+    </div>
+</form>
