@@ -77,6 +77,9 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 			self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 			self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 			self._address = (ip_address, int(port))
+			self._logger.info("Socket ready %s:%d @ %s", ip_address, port, node_name)
+
+		if self._settings.get(["aes_staticiv"]) and self._settings.get(["aes_ivkey"]) and self._settings.get(["aes_datakey"]) and self._settings.get(["aes_passphrase"]):
 			Message.node_name = node_name
 			Message.add_encoder(AES(
 				self._settings.get(["aes_staticiv"]),
@@ -84,7 +87,8 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 				self._settings.get(["aes_datakey"]),
 				self._settings.get(["aes_passphrase"]),
 			))
-			self._logger.info("Socket ready %s:%d @ %s", ip_address, port, node_name)
+			self._logger.info("Message ready")
+
 
 	def on_event(self, event, payload):
 		# print(event)
