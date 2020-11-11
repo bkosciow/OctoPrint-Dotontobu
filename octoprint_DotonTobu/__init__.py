@@ -146,9 +146,13 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 				self._socket.sendto(bytes(message), self._address)
 				self._logger.info("Message by socket")
 			if self._settings.get_boolean(["use_proxy"]) and self._settings.get(["proxy_address"]):
-				data = bytes(message)
-				req = request.Request(self._settings.get(["proxy_address"]), data=data, headers={'Content-Type': 'text/xml'})  # this will make the method "POST"
-				req.add_header('Content-Type', 'application/json; charset=utf-8')
+				data = {
+					"message": bytes(message),
+					"ip": self._settings.get(["broadcast_ip"]),
+					"port": self._settings.get_int(["port"])
+				}
+				req = request.Request(self._settings.get(["proxy_address"]), data=parse.urlencode(data).encode())
+				req.add_header('Content-Type', 'application/json;')
 				resp = request.urlopen(req)
 				self._logger.info("Message by proxy")
 
