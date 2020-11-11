@@ -5,6 +5,7 @@ import octoprint.plugin
 import socket
 from iot_message.message import Message
 from iot_message.cryptor.aes_sha1 import Cryptor as AES
+from urllib import request, parse
 
 
 class DotontobuPlugin(octoprint.plugin.StartupPlugin,
@@ -28,7 +29,26 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 			node_name="printer",
 			broadcast_ip="<broadcast>",
 			port="5053",
+			use_proxy=False,
+			proxy_address='',
 		)
+
+	def on_settings_save(self, data):
+		node_name_old = self._settings.get(["node_name"])
+		ip_address_old = self._settings.get(["broadcast_ip"])
+
+		octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
+
+		node_name = self._settings.get(["node_name"])
+		ip_address = self._settings.get(["broadcast_ip"])
+
+		if node_name_old != node_name:
+			self._logger.info("Changing name to %s ", node_name)
+			Message.node_name = node_name
+
+		if ip_address_old != ip_address:
+			self._logger.info("Changing IP to %s ", ip_address)
+			self._address = (ip_address, int(self._settings.get_int(["port"])))
 
 	##~~ AssetPlugin mixin
 
@@ -73,13 +93,13 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 		ip_address = self._settings.get(["broadcast_ip"])
 		port = self._settings.get_int(["port"])
 
-		if node_name and ip_address and port:
+		if ip_address and port:
 			self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 			self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 			self._address = (ip_address, int(port))
-			self._logger.info("Socket ready %s:%d @ %s", ip_address, port, node_name)
+			self._logger.info("Socket ready %s:%d ", ip_address, port)
 
-		if self._settings.get(["aes_staticiv"]) and self._settings.get(["aes_ivkey"]) and self._settings.get(["aes_datakey"]) and self._settings.get(["aes_passphrase"]):
+		if node_name and self._settings.get(["aes_staticiv"]) and self._settings.get(["aes_ivkey"]) and self._settings.get(["aes_datakey"]) and self._settings.get(["aes_passphrase"]):
 			Message.node_name = node_name
 			Message.add_encoder(AES(
 				self._settings.get(["aes_staticiv"]),
@@ -119,11 +139,18 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 		if event == "PrintDone":
 			data['event'] = 'done'
 
-		if data and self._socket is not None:
-			# print(data)
+		if data:
 			message = Message()
 			message.set(data)
-			self._socket.sendto(bytes(message), self._address)
+			if not self._settings.get_boolean(["use_proxy"]) and self._socket is not None:
+				self._socket.sendto(bytes(message), self._address)
+				self._logger.info("Message by socket")
+			if self._settings.get_boolean(["use_proxy"]) and self._settings.get(["proxy_address"]):
+				data = bytes(message)
+				req = request.Request(self._settings.get(["proxy_address"]), data=data, headers={'Content-Type': 'text/xml'})  # this will make the method "POST"
+				req.add_header('Content-Type', 'application/json; charset=utf-8')
+				resp = request.urlopen(req)
+				self._logger.info("Message by proxy")
 
 # If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
 # ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that

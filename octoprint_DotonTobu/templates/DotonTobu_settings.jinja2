@@ -11,6 +11,20 @@
             <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.broadcast_ip">
         </div>
     </div>
+
+    <div class="control-group">
+        <label class="control-label">{{ _('Proxy address') }}</label>
+        <div class="controls">
+            <input type="text" class="input-block-level" data-bind="value: settings.plugins.DotonTobu.proxy_address">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">{{ _('Use proxy') }}</label>
+        <div class="controls">
+            <input value="1" type="checkbox" class="input-block-level" data-bind="checked: settings.plugins.DotonTobu.use_proxy">
+        </div>
+    </div>
+
     <div class="control-group">
         <label class="control-label">{{ _('Static IV ') }}</label>
         <div class="controls">
