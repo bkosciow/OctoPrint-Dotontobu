@@ -117,16 +117,20 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 		# 	print(payload)
 
 		if event == "Connected":
-			data['event'] = 'connected'
+			data['event'] = 'status'
+			data['parameters'] = {'status': 'connected'}
 
 		if event == "Disconnected":
-			data['event'] = 'disconnected'
+			data['event'] = 'status'
+			data['parameters'] = {'status': 'disconnected'}
 
 		if event == "PrintStarted":
-			data['event'] = 'start'
+			data['event'] = 'status'
+			data['parameters'] = {'status': 'printing'}
 
 		if event == "PrintCancelled":
-			data['event'] = 'abort'
+			data['event'] = 'status'
+			data['parameters'] = {'status': 'aborted'}
 
 		if event == "DisplayLayerProgress_progressChanged":
 			data['event'] = 'progress'
@@ -137,7 +141,8 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 			}
 
 		if event == "PrintDone":
-			data['event'] = 'done'
+			data['event'] = 'status'
+			data['parameters'] = {'status': 'printed'}
 
 		if data:
 			message = Message()
