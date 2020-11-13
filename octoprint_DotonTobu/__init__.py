@@ -110,11 +110,9 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 			self._logger.info("Message ready")
 
 	def on_event(self, event, payload):
-		# print(event)
 		data = {}
 		# if event == "PrinterStateChanged":
 		# 	print("PrinterStateChanged")
-		# 	print(payload)
 
 		if event == "Connected":
 			data['event'] = 'status'
@@ -137,7 +135,10 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 			data['parameters'] = {
 				'percentage': payload['progress'],
 				'printTimeLeftInSeconds': payload['printTimeLeftInSeconds'],
-				'estimatedEndTime': payload['estimatedEndTime']
+				'estimatedEndTime': payload['estimatedEndTime'],
+				'printTimeLeft': payload['printTimeLeft'],
+				'totalLayers': payload['totalLayer'],
+				'currentLayer': payload['currentLayer'],
 			}
 
 		if event == "PrintDone":
