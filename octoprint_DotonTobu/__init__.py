@@ -115,23 +115,23 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 		# 	print("PrinterStateChanged")
 
 		if event == "Connected":
-			data['event'] = 'status'
+			data['event'] = '3dprinter.status'
 			data['parameters'] = {'status': 'connected'}
 
 		if event == "Disconnected":
-			data['event'] = 'status'
+			data['event'] = '3dprinter.status'
 			data['parameters'] = {'status': 'disconnected'}
 
 		if event == "PrintStarted":
-			data['event'] = 'status'
+			data['event'] = '3dprinter.status'
 			data['parameters'] = {'status': 'printing'}
 
 		if event == "PrintCancelled":
-			data['event'] = 'status'
+			data['event'] = '3dprinter.status'
 			data['parameters'] = {'status': 'aborted'}
 
 		if event == "DisplayLayerProgress_progressChanged":
-			data['event'] = 'progress'
+			data['event'] = '3dprinter.progress'
 			data['parameters'] = {
 				'percentage': payload['progress'],
 				'printTimeLeftInSeconds': payload['printTimeLeftInSeconds'],
@@ -142,7 +142,7 @@ class DotontobuPlugin(octoprint.plugin.StartupPlugin,
 			}
 
 		if event == "PrintDone":
-			data['event'] = 'status'
+			data['event'] = '3dprinter.status'
 			data['parameters'] = {'status': 'printed'}
 
 		if data:
